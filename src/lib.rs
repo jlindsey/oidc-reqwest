@@ -66,6 +66,8 @@ pub mod error;
 pub mod issuer;
 pub mod token;
 
+use std::collections::HashMap;
+
 pub use crate::error::Error;
 
 use biscuit::jwa::{self, SignatureAlgorithm};
@@ -76,6 +78,7 @@ use chrono::{Duration, NaiveDate, Utc};
 use inth_oauth2::token::Token as _t;
 use reqwest::Url;
 use serde::{Deserialize, Serialize};
+use serde_json::Value;
 use validator::Validate;
 use validator_derive::Validate;
 
@@ -491,6 +494,9 @@ pub struct Userinfo {
     pub address: Option<Address>,
     #[serde(default)]
     pub updated_at: Option<i64>,
+
+    #[serde(flatten)]
+    pub extra: HashMap<String, Value>,
 }
 
 /// The four values for the preferred display parameter in the Options. See spec for details.

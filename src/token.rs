@@ -5,6 +5,7 @@ use inth_oauth2::token::{self, Bearer, Expiring};
 use reqwest::Url;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
+use std::collections::HashMap;
 use url_serde;
 
 pub use biscuit::jws::Compact as Jws;
@@ -12,7 +13,7 @@ pub use biscuit::jws::Compact as Jws;
 type IdToken = Jws<Claims, Empty>;
 
 /// ID Token contents. [See spec.](https://openid.net/specs/openid-connect-basic-1_0.html#IDToken)
-#[derive(Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct Claims {
     #[serde(with = "url_serde")]
     pub iss: Url,
@@ -44,6 +45,9 @@ pub struct Claims {
     // If exists, must be client_id
     #[serde(default)]
     pub azp: Option<String>,
+
+    #[serde(flatten)]
+    pub extra: HashMap<String, Value>,
 }
 
 impl Claims {
